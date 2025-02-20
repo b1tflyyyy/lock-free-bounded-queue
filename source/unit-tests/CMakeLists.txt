@@ -31,6 +31,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(ENABLE_LEAK_SANITIZER OFF)
 option(ENABLE_THREAD_SANITIZER OFF)
 
+option(PRINT_RES_BUF OFF)
+
 set(SANITIZER)
 
 if (ENABLE_LEAK_SANITIZER)
@@ -39,6 +41,10 @@ endif()
 
 if (ENABLE_THREAD_SANITIZER)
     set(SANITIZER -fsanitize=thread)
+endif()
+
+if (PRINT_RES_BUF)
+    add_compile_definitions(PRINT_RES_BUF)
 endif()
 
 add_compile_options(${SANITIZER})
