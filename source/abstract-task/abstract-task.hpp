@@ -37,6 +37,8 @@ namespace abstract_task
     class Task<ReturnType(Args...)>
     {
     public:
+        Task() = default;
+
         template <typename FunctionType>
         explicit Task(FunctionType&& function)
         {
