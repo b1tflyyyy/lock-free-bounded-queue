@@ -23,5 +23,35 @@
 
 cmake_minimum_required(VERSION 3.22)
 
-add_subdirectory(unit-tests)
-add_subdirectory(profiling)
+project(profiling LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+option(TRACY_ENABLE "" ON)
+option(TRACY_NO_EXIT "" ON)
+
+option(SHOW_RESULTS "" OFF)
+option(USE_THREAD_YIELD "" OFF)
+
+if (SHOW_RESULTS)
+    add_compile_definitions(SHOW_RESULTS)
+endif()
+
+if(USE_THREAD_YIELD)
+    add_compile_definitions(USE_THREAD_YIELD)
+endif()
+
+set(TRACY_CXX ${CMAKE_SOURCE_DIR}/third-party/tracy/public/TracyClient.cpp)
+set(SOURCES
+    main.prof.cpp
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${TRACY_CXX})
+
+target_link_libraries(${PROJECT_NAME} PRIVATE Tracy::TracyClient)
+
+target_include_directories(${PROJECT_NAME} PRIVATE 
+    ${CMAKE_SOURCE_DIR}/third-party/tracy/public
+    ${CMAKE_SOURCE_DIR}/source 
+)
